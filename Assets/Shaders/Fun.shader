@@ -2,6 +2,7 @@ Shader "GAT350/Fun"
 {
     Properties
     {
+        // All the variables and stuff
         _Color ("Color", Color) = (1, 1, 1, 1)
         _Intensity("Intensity", Range(0, 1)) = 1
         _MainTex ("Texture", 2D) = "white" {}
@@ -54,9 +55,9 @@ Shader "GAT350/Fun"
             {
                 v2f o;
 
-                bloat = abs(sin((_Time.y * _Rate))) * _Bloat;
+                bloat = abs(sin((_Time.y * _Rate))) * _Bloat; // set the bloat variable to expand and contract scaled by the _Bloat slider
 
-                v.vertex.xyz = v.vertex.xyz + v.normal.xyz * bloat; 
+                v.vertex.xyz = v.vertex.xyz + v.normal.xyz * bloat; // apply the bloat
 
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
@@ -66,12 +67,12 @@ Shader "GAT350/Fun"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                float stripes = abs(sin(i.uv.y * _StripeSpacing * sin((_Time.y * _Rate)) + _Time.y * _Rate));
-                float stripes2 = abs(cos(i.uv.x * _StripeSpacing * cos((_Time.y * _Rate)) + _Time.y * _Rate));
+                float stripes = abs(sin(i.uv.y * _StripeSpacing * sin((_Time.y * _Rate)) + _Time.y * _Rate)); // horizontal stripes
+                float stripes2 = abs(cos(i.uv.x * _StripeSpacing * cos((_Time.y * _Rate)) + _Time.y * _Rate)); // vertical stripes
 
-                fixed4 color = fixed4(_Color.r * (stripes + stripes2)/2, 
+                fixed4 color = fixed4(_Color.r * (stripes + stripes2)/2, // apply the stripes 
                                       _Color.g * (stripes + stripes2)/2, 
-                                      _Color.b * (stripes + stripes2)/2 + 1/stripes, 
+                                      _Color.b * (stripes + stripes2)/2 + 1/stripes, // this one is 1/stripes, it makes the stripes glow which is cool
                                       _Color.a);
 
                 return color;
